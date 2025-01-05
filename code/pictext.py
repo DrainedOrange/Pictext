@@ -37,7 +37,7 @@ def msc_pic(scl):
     for q in range(height):
         hrz = []
         for p in range(width):
-            color = img.getpixel((p * anti_scl_hrz, q * anti_scl_vtc))
+            color = img.getpixel((p * anti_scl_hrz, -q * anti_scl_vtc))
             hrz.append(tuple(i / 255 for i in color))
         vtc.append(hrz)
     print('Picture mosaiced successfully')
@@ -45,7 +45,7 @@ def msc_pic(scl):
 
 # Acquire color of a point in the mosaiced picture.
 def color(point, mscd_pic):
-    return mscd_pic[point[0]][point[1]]
+    return mscd_pic[point[1]][point[0]]
 
 # --------------------------------------------------
 # PART 2: Fill the blocks with strings given in the passage, then output print info.
@@ -67,6 +67,7 @@ def r_ftsz():
     return r.randint(ftsz_m, ftsz_M)
 
 # Giving the next one's position. m is current font size and n is the next one's.
+# REMINDER: The first index refers to vertical and the second refers to horizonal.
 def next_position(current, n):
     next_p = current[0][0] + current[1]
     ceiling = 1 - max(current[1], n)
@@ -179,13 +180,13 @@ def draw(document, to_print_strings, overlapping=1):
 # Program runs here.
 # --------------------------------------------------
 
-img_path = './input/leaves.jpg'
+img_path = './input/moon.jpg'
 string_group = divide_passage('./input/passage.txt')
 font_path_group = font_group('./font')
 
-width, height = acquire_gird_size(64000)
-ftsz_m, ftsz_M = 1, 3
-mscd_pic = msc_pic(64000)
+width, height = acquire_gird_size(20000)
+ftsz_m, ftsz_M = 1, 4
+mscd_pic = msc_pic(20000)
 
 to_print_strings = fill_in_strings(string_group, font_path_group, width, height, mscd_pic)
 save_to_print_strings(to_print_strings, 'to_print_strings')
