@@ -13,7 +13,7 @@ import matplotlib.font_manager
 
 # Acquire grid width and height depending on an exact scaling factor.
 # Scaling factor represents how many blocks in total to be placed.
-def acquire_gird_size(scl):
+def acquire_grid_size(scl):
     img = Image.open(img_path)
     # img = img.rotate(-90, expand=True)
     org_width, org_height = img.size
@@ -24,6 +24,7 @@ def acquire_gird_size(scl):
     return width, height
 
 # Create mscd_pic color grid.
+# REMINDER: The first index refers to vertical and the second refers to horizonal.
 def msc_pic(scl):
     img = Image.open(img_path)
     # img = img.rotate(-90, expand=True)
@@ -55,7 +56,7 @@ def color(point, mscd_pic):
 def divide_passage(passage_path):
     with open(passage_path, 'r', encoding='utf-8') as f:
         passage = f.read()
-    string_group = re.split(r'[，。、；：“”‘’（）《》……！？\n]', passage)
+    string_group = re.split(r'[，。、；：“”‘’（）《》……！？\n——]', passage)
     string_group = [string for string in string_group if string.strip() != '']
     string_group.sort(key=len, reverse=1)
     return string_group
@@ -67,7 +68,6 @@ def r_ftsz():
     return r.randint(ftsz_m, ftsz_M)
 
 # Giving the next one's position. m is current font size and n is the next one's.
-# REMINDER: The first index refers to vertical and the second refers to horizonal.
 def next_position(current, n):
     next_p = current[0][0] + current[1]
     ceiling = 1 - max(current[1], n)
@@ -180,15 +180,15 @@ def draw(document, to_print_strings, overlapping=1):
 # Program runs here.
 # --------------------------------------------------
 
-img_path = './input/moon.jpg'
+img_path = './input/leaves.jpg'
 string_group = divide_passage('./input/passage.txt')
 font_path_group = font_group('./font')
 
-width, height = acquire_gird_size(20000)
-ftsz_m, ftsz_M = 1, 4
+width, height = acquire_grid_size(20000)
+ftsz_m, ftsz_M = 1, 2
 mscd_pic = msc_pic(20000)
 
 to_print_strings = fill_in_strings(string_group, font_path_group, width, height, mscd_pic)
 save_to_print_strings(to_print_strings, 'to_print_strings')
 
-draw('test', to_print_strings, overlapping=1)
+draw('test', to_print_strings)
